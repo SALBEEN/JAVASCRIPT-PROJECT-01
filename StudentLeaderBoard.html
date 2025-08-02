@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student leader board</title>
+    <style>
+        <style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    background: #f5f6fa;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+
+  .container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .inputarea {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    transition: border-color 0.3s ease;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #e63946;
+  }
+
+  #add {
+    padding: 12px;
+    background-color: #e63946;
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  #add:hover {
+    background-color: #c92d3b;
+  }
+
+  #leaderBoard {
+    margin-top: 20px;
+  }
+
+  #leaderBoard li {
+    list-style: none;
+    background-color: #f1f1f1;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-left: 6px solid #e63946;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 20px;
+    }
+
+    .inputarea input,
+    .inputarea button {
+      font-size: 15px;
+    }
+
+    #leaderBoard li {
+      font-size: 16px;
+    }
+  }
+  .inputarea button {
+  padding: 12px;
+  background-color: #e63946;
+  color: white;
+  border: none;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.inputarea button:hover {
+  background-color: #c92d3b;
+}
+
+</style>
+
+    </style>
+  </head>
+  <body>
+    <!-- =========== Student leaderboard accourding to their marks========== -->
+
+    <!-- =========== Main container =========== -->
+
+    <div class="container">
+      <div class="inputarea">
+        <input type="text" id="input-name" placeholder="Enter Your Name" />
+        <input
+          type="number"
+          id="input-marks"
+          placeholder="Enter Your percentage"
+        />
+        <button id="add" onclick="AddStudent()">Add Student</button>
+      </div>
+      <div id="leaderBoard"></div>
+    </div>
+
+    <!-- ============= Javascript ============ -->
+
+    <script>
+      // ===== JS code ====
+
+      let Students = [];
+
+      const AddStudent = () => {
+        const StudentMark = document.getElementById("input-marks").value.trim();
+        const StudentName = document.getElementById("input-name").value;
+
+        const newStudent = { StudentName, StudentMark };
+
+        Students = [...Students, newStudent];
+        console.log(Students);
+
+        render();
+        ClearInput();
+      };
+
+      function ClearInput() {
+        document.getElementById("input-name").value = "";
+        document.getElementById("input-marks").value = "";
+
+        // InputNameTemp = "";
+        // InputMarkTemp = "";
+      }
+
+    //   function SortStudent() {
+    //     Students = [...Students].sort((a, b) => b.StudentMark - a.StudentMark);
+    //     render();
+    //   }
+
+      function render() {
+        const list = document.getElementById("leaderBoard");
+        list.innerHTML = "";
+        Students.forEach((student, i) => {
+          const li = document.createElement("li");
+          li.textContent = `${i + 1}.  ${student.StudentName}  - ${
+            student.StudentMark
+          }% `;
+          list.appendChild(li);
+        });
+      }
+    </script>
+  </body>
+</html>

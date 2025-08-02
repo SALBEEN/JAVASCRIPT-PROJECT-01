@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* ====== Global Styles ====== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fff6f6;
+        padding: 20px;
+        color: #222;
+      }
+
+      /* ====== Container ====== */
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background-color: #ffffff;
+        padding: 30px 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      /* ====== Title ====== */
+      .title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #d62828;
+        text-align: center;
+        margin-bottom: 25px;
+      }
+
+      /* ====== Input Area ====== */
+      .input-area {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 10px 20px;
+        margin-bottom: 20px;
+        align-items: center;
+      }
+
+      .input-area .text {
+        font-weight: 600;
+      }
+
+      .input-area input {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      .input-area button {
+        grid-column: 2;
+        padding: 10px;
+        background-color: #d62828;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+      }
+
+      .input-area button:hover {
+        background-color: #b71c1c;
+      }
+
+      /* ====== Product List Table ====== */
+      #lists {
+        margin-top: 20px;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      #lists .header,
+      #lists li {
+        display: grid;
+        grid-template-columns: 40px 1fr 100px 150px 90px;
+        align-items: center;
+        padding: 12px 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      #lists .header {
+        background-color: #d62828;
+        color: white;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-radius: 8px 8px 0 0;
+      }
+
+      #lists li {
+        background-color: #f9f9f9;
+        border-left: 5px solid #d62828;
+        margin-bottom: 8px;
+        border-radius: 0 8px 8px 0;
+        transition: background-color 0.3s ease;
+      }
+
+      #lists li:hover {
+        background-color: #fff1f1;
+      }
+
+      #lists li > button {
+        justify-self: center;
+        background-color: #ff5c5c;
+        border: none;
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      #lists li > button:hover {
+        background-color: #e63946;
+      }
+
+      /* ====== Info Box ====== */
+      #information {
+        margin-top: 20px;
+        font-weight: 600;
+        font-size: 16px;
+        color: #444;
+      }
+
+      /* ====== Responsive Layout ====== */
+      @media (max-width: 600px) {
+        .input-area {
+          grid-template-columns: 1fr;
+        }
+
+        #lists .header,
+        #lists li {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto auto auto auto;
+          row-gap: 6px;
+          padding: 12px 15px;
+        }
+
+        #lists .header {
+          display: none; /* hide header on mobile for cleaner look */
+        }
+
+        #lists li {
+          border-left: none;
+          border-radius: 12px;
+          box-shadow: 0 2px 6px rgba(214, 40, 40, 0.15);
+        }
+
+        #lists li > button {
+          justify-self: start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ==============Inventory Management System================ -->
+
+    <!-- ================Main Container=========== -->
+
+    <div class="container">
+      <!-- ============ Contains input area and inventory list ============ -->
+
+      <p class="title">INVENTORY MANAGEMENT SYSTEM</p>
+      <div class="body">
+        <div class="input-area">
+          <span class="text"> Product Name </span>
+          <input type="text" id="product-name" />
+          <span class="text"> Product Price </span>
+          <input type="text" id="product-price" />
+          <span class="text"> Product category </span>
+          <input type="text" id="product-category" />
+          <button id="add" onclick="Add()">ADD Product</button>
+        </div>
+        <div id="lists"></div>
+      </div>
+
+      <!-- ================== Hold information like no. of product avaiable and categories =========== -->
+      <div id="information"></div>
+    </div>
+
+    <!-- =================== JAVASCRIPT================== -->
+    <script>
+      // ========== JS CODE =========
+
+      let Products = [];
+
+      function Add() {
+        // dom
+        const ProductName = document
+          .getElementById("product-name")
+          .value.trim();
+        const ProductCategory = document
+          .getElementById("product-category")
+          .value.trim();
+        const ProductPrice = document.getElementById("product-price").value;
+
+        const newProductDetails = {
+          ProductName,
+          ProductCategory,
+          ProductPrice,
+        };
+
+        Products = [...Products, newProductDetails];
+        Render();
+        UpdateInfo();
+        ClearInput();
+      }
+
+      //   function Render() {
+      //     const lists = document.getElementById("lists");
+      //     lists.innerHTML = "";
+
+      //     Products.forEach((product, i) => {
+      //       const li = document.createElement("li");
+      //       li.innerHTML = `${i + 1} . Product = ${
+      //         product.ProductName
+      //       }  Price = ${product.ProductPrice} Category = ${
+      //         product.ProductCategory
+      //       }
+      //         <button onclick ="Del(${i})">DELETE</button> `;
+      //       lists.appendChild(li);
+      //     });
+      //   }
+      function Render() {
+        const lists = document.getElementById("lists");
+        lists.innerHTML = `
+    <div class="header">
+      <div>#</div>
+      <div>Product Name</div>
+      <div>Price</div>
+      <div>Category</div>
+      <div>Action</div>
+    </div>
+  `;
+
+        Products.forEach((product, i) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+      <div>${i + 1}</div>
+      <div>${product.ProductName}</div>
+      <div>Rs.${product.ProductPrice}</div>
+      <div>${product.ProductCategory}</div>
+      <button onclick="Del(${i})">DELETE</button>
+    `;
+          lists.appendChild(li);
+        });
+      }
+
+      function ClearInput() {
+        document.getElementById("product-name").value = "";
+        document.getElementById("product-price").value = "";
+        document.getElementById("product-category").value = "";
+      }
+      function Del(index) {
+        Products = Products.filter((_, i) => i !== index);
+        UpdateInfo();
+        Render();
+      }
+      function UpdateInfo() {
+        const info = document.getElementById("information");
+        const total = Products.length;
+        const categories = [...new Set(Products.map((p) => p.ProductCategory))];
+        info.textContent = `Total Products: ${total} | Categories: ${categories.join(
+          ", "
+        )}`;
+      }
+    </script>
+  </body>
+</html>

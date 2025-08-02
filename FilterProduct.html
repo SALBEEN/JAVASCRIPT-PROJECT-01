@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product filter</title>
+    <style>
+        <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    background-color: #f9f9f9;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    width: 400px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px 25px;
+  }
+
+  .title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #c92a2a; /* red theme */
+    text-align: center;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    margin: 20px 0;
+    accent-color: #c92a2a;
+  }
+
+  #selectedPrice {
+    font-size: 16px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  button {
+    background-color: #c92a2a;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+  }
+
+  button:hover {
+    background-color: #a51111;
+  }
+
+  #productList {
+    list-style: none;
+    padding-left: 10px;
+  }
+
+  #productList li {
+    padding: 10px;
+    background-color: #ffe3e3;
+    border: 1px solid #ffc9c9;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: #b00000;
+  }
+</style>
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p class="title">Product Accourding to price</p>
+
+      <input type="range" min="200" max="1200" value="700" id="range" />
+      <p id="selectedPrice"></p>
+      <button id="select" onclick="Filter()">Select</button>
+
+      <div id="productList"></div>
+    </div>
+
+    <script>
+      // javasaript
+      const Products = [
+        { name: "Laptop", price: 934 },
+        { name: "Mouse", price: 432 },
+        { name: "Keyboard", price: 1100 },
+        { name: "Monitor", price: 87 },
+        { name: "Headphones", price: 623 },
+      ];
+
+      function Filter() {
+        // const Select = document.getElementById("select");
+        const Range = document.getElementById("range").value;
+        // const Price = Range.value;
+        // console.log(Range);
+
+        const SelectedProduct = Products.filter((p) => p.price <= Range).map(
+          (p) => p.name
+        );
+        console.log(SelectedProduct);
+
+        Render(SelectedProduct);
+        selectedPrice(Range);
+      }
+
+      function Render(SelectedProduct) {
+        const selectedPrice = document.getElementById("productList");
+        selectedPrice.innerHTML = SelectedProduct.map(
+          (p, i) => `
+          <li>
+            ${i + 1}. ${p}
+          </li>`
+        ).join("");
+
+        // selectedPrice.appendChild(li);
+      }
+      Filter();
+
+      function selectedPrice(Range) {
+        const Pricepreview = document.getElementById("selectedPrice");
+        Pricepreview.innerHTML = `Selected price Range : 0 - ${Range}`;
+      }
+    </script>
+  </body>
+</html>
