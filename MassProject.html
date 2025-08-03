@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Make Your Own Team</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f4f6;
+        padding: 20px;
+        color: #333;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+
+      #items,
+      #cartItems,
+      #wishlist {
+        margin-top: 30px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #fefefe;
+      }
+
+      li {
+        list-style-type: none;
+        margin-bottom: 15px;
+        line-height: 1.6;
+        background-color: #f9fafb;
+        padding: 10px;
+        border-radius: 8px;
+        position: relative;
+      }
+
+      .btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-left: 8px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .add-to-cart {
+        background-color: #ef4444; /* red */
+        color: white;
+      }
+
+      .add-to-cart:hover {
+        background-color: #dc2626;
+      }
+
+      .add-to-wishlist {
+        background-color: #3b82f6; /* blue */
+        color: white;
+      }
+
+      .add-to-wishlist:hover {
+        background-color: #2563eb;
+      }
+
+      p {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ================= html codes ============ -->
+
+    <div class="container">
+      <p>Ecommerce website</p>
+
+      <!-- iteams are listed which are fetch from apis -->
+      <div id="items"></div>
+
+      <!-- items are displayed which are selected from items  -->
+      <div id="cartItems"></div>
+
+      <!-- wishlist are displayed here  -->
+      <div id="wishlist"></div>
+    </div>
+
+    <script>
+      // =====fetching api======
+
+      async function ProductList() {
+        const content = await fetch("https://fakestoreapi.com/products");
+        const ProductData = await content.json();
+        console.log(ProductData);
+        // console.log(ProductData[0].title);
+
+        Items = ProductData;
+
+        Render(ProductData);
+        // AddToWishlist(ProductData);
+        // ProductList();
+      }
+
+      //   empty array
+
+      let CartItems = [];
+      let WishList = [];
+      let Items = [];
+
+      function AddToCart(index) {
+        // add funtion code
+
+        const SelectedItem = Items[index];
+        const alreadySelected = CartItems.find(
+          (item) => item.id == SelectedItem.id
+        );
+
+        if (!alreadySelected) {
+          CartItems.push(SelectedItem);
+          RenderCartItems();
+        }
+      }
+
+      function RenderCartItems() {
+        const cartItemsContainer = document.getElementById("cartItems");
+        cartItemsContainer.innerHTML = "<p>Cart Items</p>";
+
+        CartItems.map((item, i) => {
+          const li = document.createElement("li");
+          li.innerHTML = `Product Name: ${item.title} Product Price: ${item.price}
+          <button onclick="DelCartItem(${i})">Delete</button>`;
+          cartItemsContainer.appendChild(li);
+        });
+      }
+
+      function AddToWishlist(index) {
+        // add funtion code
+        // const newWishlist = ProductData.map((_, i) => i !== index);
+
+        const selectedItems = Items[index];
+
+        const alreadySelected = WishList.find(
+          (item) => item.id === selectedItems.id
+        );
+
+        if (!alreadySelected) {
+          WishList.push(selectedItems);
+          RenderWishlist();
+        } else {
+          alert("already selected");
+        }
+      }
+
+      function RenderWishlist() {
+        // rendering wishlist in the browser
+        const WishlistContainer = document.getElementById("wishlist");
+        WishlistContainer.innerHTML = "<p>WishList Item</p>";
+
+        WishList.map((item, i) => {
+          const li = document.createElement("li");
+          li.innerHTML = `${i + 1}. => Product Name: ${
+            item.title
+          } Product Price: ${item.price}
+           <button onclick="DelWishlist(${i})">Delete</button>`;
+          WishlistContainer.appendChild(li);
+        });
+      }
+
+      function DelCartItem(index) {
+        // delete item from cart
+        CartItems = CartItems.filter((item, i) => i !== index);
+        RenderCartItems();
+      }
+
+      function DelWishlist(index) {
+        // delete item from wishlist
+        WishList = WishList.filter((item, i) => i !== index);
+        RenderWishlist();
+      }
+
+      //   function to display items from API
+
+      function Render(ProductData) {
+        const ItemList = document.getElementById("items");
+        ItemList.innerHTML = "";
+
+        ProductData.map((item, i) => {
+          li = document.createElement("li");
+          li.innerHTML = `${i + 1}. => Product Name: ${
+            item.title
+          } || Product Price: $ ${item.price}
+          }
+          <button onclick="AddToCart(${i})">Add to Cart</button>
+          <button onclick="AddToWishlist(${i})">Add to Wishlist</button>`;
+          ItemList.appendChild(li);
+        });
+      }
+
+      ProductList();
+    </script>
+  </body>
+</html>
